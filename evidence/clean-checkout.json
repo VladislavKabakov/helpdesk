@@ -1,0 +1,16 @@
+{
+  "baseline_commit": "f58554c3ef048ac3652e2c265c48a76c30e78e91",
+  "checked_at": "2026-09-26T15:10:58.015190+00:00",
+  "tests": 28,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "fresh_checkout": true,
+  "fresh_credentials": true,
+  "fresh_volume": true,
+  "compose_healthy": true,
+  "http_smoke_passed": true,
+  "source_checksums_match": true,
+  "local_document_links_passed": true,
+  "remote_ci_run": false
+}
