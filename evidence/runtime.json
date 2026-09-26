@@ -1,0 +1,18 @@
+{
+  "recorded_at": "2026-09-26T15:08:40.814665+00:00",
+  "docker_server": "23.0.6",
+  "compose": "Docker Compose version 2.18.1",
+  "postgres": "17.11",
+  "uid": "uid=10001(app) gid=10001(app) groups=10001(app)",
+  "runtime_jdk": "openjdk version \"17.0.20.1\" 2026-08-18\nOpenJDK Runtime Environment Temurin-17.0.20.1+1 (build 17.0.20.1+1)\nOpenJDK 64-Bit Server VM Temurin-17.0.20.1+1 (build 17.0.20.1+1, mixed mode, sharing)",
+  "app_image_id": "sha256:f0dbac188361aaa344c458e6674c3e8694c25fca3801b58d7e341816a71c63d6",
+  "read_only": "true",
+  "ports": "{\"8080/tcp\":[{\"HostIp\":\"127.0.0.1\",\"HostPort\":\"8080\"}]}",
+  "db_ports": "{\"5432/tcp\":null}",
+  "database_role": "helpdesk|f|f|f",
+  "successful_migrations": 1,
+  "ticket_digest_before_restart": "2:4fcfad990b562573036f2878c6b776f9",
+  "ticket_digest_after_restart": "2:4fcfad990b562573036f2878c6b776f9",
+  "data_survived_restart": true,
+  "generated_credentials_absent_from_app_logs": true
+}

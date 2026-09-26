@@ -1,0 +1,49 @@
+name: course-helpdesk
+services:
+  db:
+    image: postgres:17-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+    environment:
+      POSTGRES_DB: helpdesk
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run python3 scripts/init_env.py}
+      APP_PASSWORD: ${DB_PASSWORD:?Run python3 scripts/init_env.py}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./docker/init-db.sh:/docker-entrypoint-initdb.d/01-app.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d helpdesk"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    networks: [backend]
+    mem_limit: 512m
+  app:
+    build: .
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/helpdesk
+      DB_USER: helpdesk
+      DB_PASSWORD: ${DB_PASSWORD:?Run python3 scripts/init_env.py}
+      DEMO_ENABLED: "true"
+      DEMO_ALICE_PASSWORD: ${DEMO_ALICE_PASSWORD:?Run python3 scripts/init_env.py}
+      DEMO_BOB_PASSWORD: ${DEMO_BOB_PASSWORD:?Run python3 scripts/init_env.py}
+      DEMO_AGENT1_PASSWORD: ${DEMO_AGENT1_PASSWORD:?Run python3 scripts/init_env.py}
+      DEMO_AGENT2_PASSWORD: ${DEMO_AGENT2_PASSWORD:?Run python3 scripts/init_env.py}
+    ports: ["127.0.0.1:${APP_PORT:-8080}:8080"]
+    depends_on:
+      db:
+        condition: service_healthy
+    read_only: true
+    tmpfs: ["/tmp:size=64m,mode=1777"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    mem_limit: 768m
+    networks: [backend]
+volumes:
+  db-data:
+networks:
+  backend:

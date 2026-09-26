@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: helpdesk
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/helpdesk}
+    username: ${DB_USER:helpdesk}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 8
+      connection-timeout: 5000
+  flyway:
+    clean-disabled: true
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+server:
+  port: 8080
+  shutdown: graceful
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+  servlet:
+    session:
+      timeout: 15m
+      cookie:
+        http-only: true
+        same-site: strict
+        secure: ${COOKIE_SECURE:false}
+  tomcat:
+    max-http-form-post-size: 16KB
+    max-swallow-size: 16KB
+helpdesk:
+  demo:
+    enabled: ${DEMO_ENABLED:false}

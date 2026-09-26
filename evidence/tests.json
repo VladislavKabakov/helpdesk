@@ -1,0 +1,152 @@
+[
+  {
+    "suite": "ru.course.helpdesk.HelpdeskIntegrationTest",
+    "timestamp_utc": "2026-09-26T15:04:04.006Z",
+    "tests": 28,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "cases": [
+      {
+        "name": "real login and lifecycle work()",
+        "seconds": 1.561,
+        "passed": true
+      },
+      {
+        "name": "invalid transition does not write audit or message()",
+        "seconds": 0.323,
+        "passed": true
+      },
+      {
+        "name": "unsupported read method and absent route preserve status codes()",
+        "seconds": 0.311,
+        "passed": true
+      },
+      {
+        "name": "invalid credentials do not disclose account existence()",
+        "seconds": 0.605,
+        "passed": true
+      },
+      {
+        "name": "[1] operation=comments",
+        "seconds": 0.621,
+        "passed": true
+      },
+      {
+        "name": "[2] operation=reopen",
+        "seconds": 0.619,
+        "passed": true
+      },
+      {
+        "name": "logout invalidates session()",
+        "seconds": 0.312,
+        "passed": true
+      },
+      {
+        "name": "[1] body={\"title\":\" \",\"description\":\"x\"}",
+        "seconds": 0.316,
+        "passed": true
+      },
+      {
+        "name": "[2] body={\"title\":\"x\",\"description\":\"y\",\"requesterId\":\"fake\"}",
+        "seconds": 0.312,
+        "passed": true
+      },
+      {
+        "name": "[3] body={\"title\":\"x\",\"description\":\"y\",\"status\":\"RESOLVED\"}",
+        "seconds": 0.316,
+        "passed": true
+      },
+      {
+        "name": "[4] body={\"title\":null,\"description\":\"x\"}",
+        "seconds": 0.316,
+        "passed": true
+      },
+      {
+        "name": "anonymous cannot read tickets()",
+        "seconds": 0.009,
+        "passed": true
+      },
+      {
+        "name": "sql fragments are stored as data()",
+        "seconds": 0.315,
+        "passed": true
+      },
+      {
+        "name": "queue and creation enforce role separation()",
+        "seconds": 0.606,
+        "passed": true
+      },
+      {
+        "name": "resolved ticket rejects comments without changing history()",
+        "seconds": 0.63,
+        "passed": true
+      },
+      {
+        "name": "csrf required for mutations and login()",
+        "seconds": 0.306,
+        "passed": true
+      },
+      {
+        "name": "long text and invalid ids or pagination are rejected()",
+        "seconds": 0.317,
+        "passed": true
+      },
+      {
+        "name": "unassigned agent cannot read detail or write()",
+        "seconds": 0.925,
+        "passed": true
+      },
+      {
+        "name": "password hashes are salted and never returned()",
+        "seconds": 0.899,
+        "passed": true
+      },
+      {
+        "name": "oversized json is rejected before deserialization()",
+        "seconds": 0.307,
+        "passed": true
+      },
+      {
+        "name": "[1] operation=claim",
+        "seconds": 0.317,
+        "passed": true
+      },
+      {
+        "name": "[2] operation=resolve",
+        "seconds": 0.319,
+        "passed": true
+      },
+      {
+        "name": "[3] operation=internal-notes",
+        "seconds": 0.316,
+        "passed": true
+      },
+      {
+        "name": "foreign owner cannot read list or ticket()",
+        "seconds": 0.619,
+        "passed": true
+      },
+      {
+        "name": "comment cannot become an internal note through extra field()",
+        "seconds": 0.318,
+        "passed": true
+      },
+      {
+        "name": "two agents cannot claim same ticket()",
+        "seconds": 0.324,
+        "passed": true
+      },
+      {
+        "name": "login changes session identifier()",
+        "seconds": 0.303,
+        "passed": true
+      },
+      {
+        "name": "internal notes never reach requester()",
+        "seconds": 0.932,
+        "passed": true
+      }
+    ]
+  }
+]
