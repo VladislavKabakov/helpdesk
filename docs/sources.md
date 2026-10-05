@@ -1,29 +1,35 @@
 # Источники и границы использования
 
-Материалы проверены 26 сентября 2026 года. Основа требований — магистерский курс. Бакалаврские примеры использованы только для выбора темы; их состав команды, элементы контроля и отдельные формы отчётности не переносились.
+Первичный анализ выполнен 26 сентября, финальная сверка — 5 октября 2026 года. Основа требований — магистерский курс. Бакалаврские примеры использованы только для выбора темы; их состав команды, элементы контроля и отдельные формы отчётности не переносились.
 
 ## Репозиторий магистерского курса
 
-Рассмотрено состояние `2897f06364d865e32c91861bc4f160a541e863b0`. Ссылки ниже закреплены на этом состоянии, чтобы изменения курса не меняли задним числом основание проекта. Новые объявления преподавателя следует проверять отдельно.
+Рассмотрено состояние `5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884`. Ссылки ниже закреплены на этом состоянии, чтобы изменения курса не меняли задним числом основание проекта. Новые объявления преподавателя следует проверять отдельно.
 
 | Источник | Как использован |
 | --- | --- |
-| [README](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/README.md) | Один продукт и выпуск, допустимость небольшого сгенерированного продукта |
-| [Описание проекта](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/project/README.md) | Структура репозитория, единый документ и свидетельства |
-| [Шаблон](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/project/project-template.md) | Сохранены разделы 1–5 и 12; разделы ЭК2 пока не заполнены |
-| [Сквозной пример LinkDrop](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/project/project-example.md) | Конкретность, небольшая область и допустимость результата без найденных уязвимостей |
-| [Антипример](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/project/passport-antipattern.md) | Проверены доступность кода, узкие границы, возможность изменения и повторной проверки |
-| [S01](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/seminars/S01.md) | Запускаемый каркас, исходное состояние и паспорт |
-| [S02](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/seminars/S02.md) | Сравнение не менее трёх рамок, одна основная, ограниченная роль дополнительных |
-| [S03](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/seminars/S03.md) | Семь адаптированных задач с действиями, ответственностью и проверкой |
-| [Оценивание](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/assessment.md) | Проверка по всем пяти критериям ЭК1; tag `ek1` |
-| [Использование ИИ](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/ai-usage.md) | Описание задач, модели, данных и способа проверки без полного журнала запросов |
-| [Термины и источники](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/resources.md) | Русские термины при первом упоминании и фиксация редакций источников |
-| [L01](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/lectures/L01.pdf) | Связь продукта, процесса, свидетельств и решения |
-| [L02](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/lectures/L02.pdf) | Переход от положения источника к исполнимой практике |
-| [L03](https://github.com/hse-rbpo-master-2026/course/blob/2897f06364d865e32c91861bc4f160a541e863b0/lectures/L03.pdf) | Разные назначения рамок и соразмерная адаптация |
+| [README](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/README.md) | Один продукт и выпуск, допустимость небольшого сгенерированного продукта |
+| [Описание проекта](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/project/README.md) | Структура репозитория, единый документ и свидетельства |
+| [Шаблон](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/project/project-template.md) | Сохранены разделы 1–5 и 12; разделы ЭК2 пока не заполнены |
+| [Сквозной пример LinkDrop](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/project/project-example.md) | Конкретность, небольшая область и допустимость результата без найденных уязвимостей |
+| [Антипример](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/project/passport-antipattern.md) | Проверены доступность кода, узкие границы, возможность изменения и повторной проверки |
+| [S01](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/seminars/S01.md) | Запускаемый каркас, исходное состояние и паспорт |
+| [S02](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/seminars/S02.md) | Сравнение не менее трёх рамок, одна основная, ограниченная роль дополнительных |
+| [S03](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/seminars/S03.md) | Семь адаптированных задач с действиями, ответственностью и проверкой |
+| [Оценивание](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/assessment.md) | Проверка по всем пяти критериям ЭК1; tag `ek1` |
+| [Использование ИИ](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/ai-usage.md) | Описание задач, модели, данных и способа проверки без полного журнала запросов |
+| [Термины и источники](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/resources.md) | Русские термины при первом упоминании и фиксация редакций источников |
+| [L01](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/lectures/L01.pdf) | Связь продукта, процесса, свидетельств и решения |
+| [L02](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/lectures/L02.pdf) | Переход от положения источника к исполнимой практике |
+| [L03](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/lectures/L03.pdf) | Разные назначения рамок и соразмерная адаптация |
 
-На дату анализа опубликованы только S01–S03 и L01–L03. Требования к остальным частям ЭК1 взяты из общего шаблона и оценивания. Не заявляется анализ ещё не опубликованных семинаров.
+При финальной сверке дополнительно прочитаны:
+
+- [S04](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/seminars/S04.md) и [L04](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/lectures/L04.pdf): выборка текущего процесса, различие наблюдения, правила и неизвестного; основания существенных разрывов.
+- [S05](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/seminars/S05.md) и [L05](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/lectures/L05.pdf): отдельные решения по изменению и выпуску, полномочия, исключения и обратная связь после выпуска.
+- [S06](https://github.com/hse-rbpo-master-2026/course/blob/5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884/seminars/S06.md): архив из тега `ek1`, подача через ЭИОС; индивидуальная страница на ЭК1 не требуется.
+
+Первоначальный анализ опирался на `2897f06364d865e32c91861bc4f160a541e863b0`, когда были доступны S01–S03 и L01–L03. Окончательные требования сверены по состоянию выше. Версии выбранных SSDF и ASVS не менялись.
 
 Дополнительно прочитаны локальные паспорт, пример DocFlow и антипример Customer360 из папки автора. Они помогли проверить конкретность границ, но не использовались как актуальная форма сдачи: текущий репозиторий требует раздел 1 общего `project.md`.
 

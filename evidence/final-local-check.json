@@ -1,0 +1,15 @@
+{
+  "checked_date": "2026-10-05",
+  "source_manifest": "source-sha256.json",
+  "source_checksums_match": true,
+  "tests": 28,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "compose_healthy": true,
+  "http_smoke_passed": true,
+  "history_blobs_checked": 45,
+  "known_local_secrets_absent": true,
+  "credential_patterns_absent": true,
+  "scope_note": "Exact local password comparison and selected credential patterns; not a full secret scanner or vulnerability audit."
+}
