@@ -9,6 +9,10 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.TestConfiguration
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.mock.web.MockHttpSession
@@ -28,10 +32,12 @@ import java.util.concurrent.Callable
 import java.util.concurrent.CyclicBarrier
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicLong
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
+@Import(HelpdeskIntegrationTest.LimiterClock::class)
 class HelpdeskIntegrationTest {
     @Autowired lateinit var mvc: MockMvc
     @Autowired lateinit var json: ObjectMapper
@@ -39,7 +45,14 @@ class HelpdeskIntegrationTest {
     @Autowired lateinit var service: TicketService
     private val sessions = mutableMapOf<String, MockHttpSession>()
 
+    @TestConfiguration
+    class LimiterClock {
+        @Bean @Primary
+        fun deterministicLimiter() = LoginAttemptLimiter(nanoTime = ticker::get)
+    }
+
     companion object {
+        private val ticker = AtomicLong()
         @Container @JvmStatic
         val postgres = PostgreSQLContainer<Nothing>("postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24").apply {
             waitingFor(WaitAllStrategy()
@@ -58,6 +71,7 @@ class HelpdeskIntegrationTest {
 
     @BeforeEach
     fun prepare() {
+        ticker.addAndGet(TimeUnit.MINUTES.toNanos(2))
         jdbc.sql("TRUNCATE audit_event, ticket_message, ticket, app_user RESTART IDENTITY CASCADE").update()
         sessions.clear()
         listOf("alice", "bob", "agent1", "agent2").forEach { name ->
@@ -67,11 +81,42 @@ class HelpdeskIntegrationTest {
         }
     }
 
+    @Test fun `login limit blocks before authentication and recovers without locking account`() {
+        val initial = mvc.perform(get("/api/csrf")).andReturn()
+        val session = initial.request.session as MockHttpSession
+        val token = json.readTree(initial.response.contentAsString)["token"].asText()
+        fun login(address: String, password: String, forwarded: String? = null) =
+            post("/api/login").servletPath("/api/login").session(session)
+                .with { it.remoteAddr = address; it }
+                .header("X-CSRF-TOKEN", token)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("username", "alice").param("password", password)
+                .also { if (forwarded != null) it.header("X-Forwarded-For", forwarded) }
+        repeat(10) { mvc.perform(login("192.0.2.1", "wrong")).andExpect(status().isUnauthorized) }
+        val blocked = mvc.perform(login("192.0.2.1", PASSWORD, "192.0.2.2"))
+            .andExpect(status().isTooManyRequests).andReturn()
+        assertThat(blocked.response.getHeader("Retry-After")).isEqualTo("60")
+        mvc.perform(get("/health").with { it.remoteAddr = "192.0.2.1"; it }).andExpect(status().isOk)
+        mvc.perform(login("192.0.2.2", "wrong")).andExpect(status().isUnauthorized)
+        ticker.addAndGet(TimeUnit.SECONDS.toNanos(60))
+        mvc.perform(login("192.0.2.1", PASSWORD)).andExpect(status().isNoContent)
+    }
+
+    @Test fun `invalid csrf cannot consume login budget and limit does not block health`() {
+        repeat(12) {
+            mvc.perform(post("/api/login").servletPath("/api/login")
+                .param("username", "alice").param("password", "wrong"))
+                .andExpect(status().isForbidden)
+        }
+        session("alice")
+        mvc.perform(get("/health")).andExpect(status().isOk)
+    }
+
     private fun session(name: String): MockHttpSession = sessions.getOrPut(name) {
         val initial = mvc.perform(get("/api/csrf")).andReturn()
         val session = initial.request.session as MockHttpSession
         val token = json.readTree(initial.response.contentAsString)["token"].asText()
-        mvc.perform(post("/api/login").session(session).header("X-CSRF-TOKEN", token)
+        mvc.perform(post("/api/login").servletPath("/api/login").session(session).header("X-CSRF-TOKEN", token)
             .contentType(MediaType.APPLICATION_FORM_URLENCODED).param("username", name).param("password", PASSWORD))
             .andExpect(status().isNoContent).andReturn().request.session as MockHttpSession
     }
@@ -130,6 +175,35 @@ class HelpdeskIntegrationTest {
         getAs("agent2", "/api/tickets/$id", 404)
     }
 
+
+    @Test fun `private notes are filtered before pagination`() {
+        val id = create()
+        postAs("agent1", "/api/tickets/$id/claim")
+        repeat(55) { postAs("agent1", "/api/tickets/$id/internal-notes", """{"body":"PRIVATE-$it"}""", 204) }
+        repeat(51) { postAs("alice", "/api/tickets/$id/comments", """{"body":"PUBLIC-$it"}""", 204) }
+        val first = json.readTree(getAs("alice", "/api/tickets/$id"))["messages"]
+        val second = json.readTree(getAs("alice", "/api/tickets/$id?offset=50"))["messages"]
+        assertThat(first.size()).isEqualTo(50)
+        assertThat(second.size()).isEqualTo(1)
+        val bodies = (first + second).map { it["body"].asText() }.toSet()
+        assertThat(bodies).isEqualTo((0..50).map { "PUBLIC-$it" }.toSet())
+        assertThat(getAs("alice", "/api/tickets/$id?offset=51")).doesNotContain("PRIVATE-")
+    }
+
+    @Test fun `reassignment transfers history but revokes former agent access`() {
+        val id = create()
+        postAs("agent1", "/api/tickets/$id/claim")
+        postAs("agent1", "/api/tickets/$id/internal-notes", """{"body":"PRIVATE-HISTORY"}""", 204)
+        postAs("agent1", "/api/tickets/$id/resolve", """{"body":"Готово"}""")
+        postAs("alice", "/api/tickets/$id/reopen")
+        postAs("agent2", "/api/tickets/$id/claim")
+        getAs("agent1", "/api/tickets/$id", 404)
+        postAs("agent1", "/api/tickets/$id/internal-notes", """{"body":"Недопустимо"}""", 404)
+        assertThat(getAs("agent1", "/api/tickets")).doesNotContain(id)
+        assertThat(getAs("agent2", "/api/tickets/$id")).contains("PRIVATE-HISTORY")
+        assertThat(getAs("alice", "/api/tickets/$id")).doesNotContain("PRIVATE-HISTORY")
+    }
+
     @ParameterizedTest @ValueSource(strings = ["claim", "resolve", "internal-notes"])
     fun `user cannot call agent operations`(operation: String) {
         val id = create()
@@ -160,7 +234,7 @@ class HelpdeskIntegrationTest {
     @Test fun `invalid credentials do not disclose account existence`() {
         fun failure(name: String): String {
             val result = mvc.perform(get("/api/csrf")).andReturn()
-            return mvc.perform(post("/api/login").session(result.request.session as MockHttpSession)
+            return mvc.perform(post("/api/login").servletPath("/api/login").session(result.request.session as MockHttpSession)
                 .header("X-CSRF-TOKEN", json.readTree(result.response.contentAsString)["token"].asText())
                 .param("username", name).param("password", "wrong"))
                 .andExpect(status().isUnauthorized).andReturn().response.contentAsString
@@ -241,7 +315,7 @@ class HelpdeskIntegrationTest {
         val session = result.request.session as MockHttpSession
         val oldId = session.id
         val token = json.readTree(result.response.contentAsString)["token"].asText()
-        val login = mvc.perform(post("/api/login").session(session).header("X-CSRF-TOKEN", token)
+        val login = mvc.perform(post("/api/login").servletPath("/api/login").session(session).header("X-CSRF-TOKEN", token)
             .param("username", "alice").param("password", PASSWORD)).andExpect(status().isNoContent).andReturn()
         assertThat(login.request.session!!.id).isNotEqualTo(oldId)
     }

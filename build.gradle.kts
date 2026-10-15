@@ -3,10 +3,17 @@ plugins {
     kotlin("plugin.spring") version "2.2.21"
     id("org.springframework.boot") version "3.5.16"
     id("io.spring.dependency-management") version "1.1.7"
+    id("org.cyclonedx.bom") version "3.5.1"
 }
 
 group = "ru.course"
-version = "0.1.0"
+version = "1.0.0"
+
+// Patch vulnerable runtime libraries within the current Boot 3.5 / Java 17 line.
+extra["jackson-bom.version"] = "2.21.7"
+extra["tomcat.version"] = "10.1.61"
+extra["postgresql.version"] = "42.7.14"
+extra["log4j2.version"] = "2.25.5"
 
 repositories { mavenCentral() }
 kotlin { jvmToolchain(17) }
@@ -32,3 +39,9 @@ dependencyLocking { lockAllConfigurations() }
 tasks.test { useJUnitPlatform() }
 tasks.bootJar { archiveFileName.set("helpdesk.jar") }
 tasks.jar { enabled = false }
+
+// Runtime-only SBOM: test tooling is not part of the delivered application.
+tasks.cyclonedxDirectBom {
+    includeConfigs = listOf("runtimeClasspath")
+    includeLicenseText = false
+}

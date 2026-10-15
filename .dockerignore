@@ -8,3 +8,5 @@ evidence
 individual
 docs
 *.md
+
+.kotlin/

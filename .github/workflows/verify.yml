@@ -1,4 +1,4 @@
-name: Проверка исходного состояния
+name: Проверка Helpdesk
 on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
@@ -13,11 +13,16 @@ jobs:
           distribution: temurin
           java-version: '17'
       - name: Тесты и сборка
-        run: ./gradlew clean test bootJar --no-daemon
+        run: ./gradlew clean test bootJar cyclonedxBom --no-daemon
+      - name: Состав поставки
+        run: python3 scripts/package_sbom.py --output build/reports/sbom-runtime.cdx.json
       - name: Документация
         run: python3 scripts/check_docs.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
-          name: test-results
-          path: build/test-results/test/
+          name: test-results-and-sbom
+          path: |
+            build/test-results/test/
+            build/reports/cyclonedx/bom.json
+            build/reports/sbom-runtime.cdx.json

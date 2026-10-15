@@ -10,12 +10,16 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.csrf.CsrfToken
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @Configuration
 class SecurityConfig {
+    @Bean
+    fun loginAttemptLimiter() = LoginAttemptLimiter()
+
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder(12)
 
@@ -30,12 +34,13 @@ class SecurityConfig {
     }
 
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+    fun filterChain(http: HttpSecurity, limiter: LoginAttemptLimiter): SecurityFilterChain {
         http.authorizeHttpRequests {
             it.requestMatchers("/api/csrf", "/health", "/error").permitAll()
                 .requestMatchers("/api/**").authenticated().anyRequest().denyAll()
         }
         // CSRF and session fixation protection remain enabled, including for login/logout.
+        http.addFilterBefore(LoginRateLimitFilter(limiter), UsernamePasswordAuthenticationFilter::class.java)
         http.formLogin {
             it.loginProcessingUrl("/api/login")
                 .successHandler { _, response, _ -> response.status = 204 }
