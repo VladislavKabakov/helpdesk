@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check local Markdown targets and the presence of EK1 sections; not a semantic review."""
+"""Check local Markdown targets and the presence of EK2 sections; not a semantic review."""
 from pathlib import Path
 import re
 import sys
@@ -7,7 +7,7 @@ import sys
 root = Path(__file__).resolve().parents[1]
 errors = []
 files = [root / "README.md", root / "project.md", *root.glob("docs/*.md"),
-         *root.glob("individual/*.md"), *root.glob("evidence/*.md")]
+         *root.glob("individual/*.md"), *(root / "evidence").rglob("*.md")]
 for path in files:
     if not path.exists():
         errors.append(f"Нет файла: {path.relative_to(root)}")
@@ -23,10 +23,12 @@ project = root / "project.md"
 if project.exists():
     content = project.read_text()
     for section in ["1. Паспорт проекта", "2. Методологическая основа", "3. Текущее состояние",
-                    "4. Целевой Secure SDLC", "5. Технологический профиль", "12. Использование генеративного ИИ"]:
+                    "4. Целевой Secure SDLC", "5. Технологический профиль", "6. Практическая апробация",
+                    "7. Результаты и триаж", "8. Улучшение и повторная проверка", "9. Решение о выпуске",
+                    "10. Метрики и программа развития", "11. Управленческая записка", "12. Использование генеративного ИИ"]:
         if f"## {section}" not in content:
             errors.append(f"Нет раздела {section}")
 if errors:
     print("\n".join(errors))
     sys.exit(1)
-print(f"PASS: {len(files)} документов, локальные ссылки и разделы ЭК1")
+print(f"PASS: {len(files)} документов, локальные ссылки и разделы ЭК2")

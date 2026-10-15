@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-10-15T13:23:13.768829+00:00",
+  "finished_at": "2026-10-15T13:24:14.592741+00:00",
+  "scope": "Fresh local instance, one transport address, 12 failed logins, synthetic account",
+  "expected_mode": "limited",
+  "failed_login_statuses": [
+    401,
+    401,
+    401,
+    401,
+    401,
+    401,
+    401,
+    401,
+    401,
+    401,
+    429,
+    429
+  ],
+  "spoofed_forwarded_for_status": 429,
+  "recovery_wait_seconds": 57.1,
+  "valid_login_status": 204,
+  "passed": true
+}

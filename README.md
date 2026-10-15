@@ -4,7 +4,7 @@
 Пользователь создаёт обращение и общается со специалистом. Специалист принимает обращение, ведёт переписку, добавляет внутренние заметки и фиксирует решение.
 Пользователь может повторно открыть обращение при необходимости.
 
-Материалы ЭК1 находятся в [project.md](project.md). Объект ограничен локальной учебной средой с искусственными данными. Полноценного интерфейса, регистрации, почты и вложений нет.
+Материалы ЭК2 находятся в [project.md](project.md). Объект ограничен локальной учебной средой с искусственными данными. Полноценного интерфейса, регистрации, почты и вложений нет.
 
 ## Быстрый запуск
 
@@ -14,7 +14,7 @@
 * Python 3
 * Доступ в интернет для первой сборки
 
-На macOS подходят Colima или Docker Desktop. JDK и компилятор Kotlin на компьютере для Docker-запуска не нужны.
+На macOS подходят Colima или Docker Desktop. Для Colima держите копию проекта в домашнем каталоге (например, `~/IdeaProjects/helpdesk`): `/private/tmp` по умолчанию может быть недоступен для bind mount скрипта инициализации БД. JDK и компилятор Kotlin на компьютере для Docker-запуска не нужны.
 
 1. Из корня этого репозитория:
 
@@ -74,7 +74,7 @@ python3 scripts/smoke.py
 Нужны JDK 17 и работающий Docker. Gradle установленным быть не обязан: используется обертка (wrapper) с проверкой SHA-256 дистрибутива.
 
 ```sh
-./gradlew clean test bootJar --no-daemon
+./gradlew clean test bootJar cyclonedxBom --no-daemon
 python3 scripts/check_docs.py
 ```
 
@@ -83,7 +83,7 @@ python3 scripts/check_docs.py
 ```sh
 export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
 export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
-./gradlew clean test bootJar --no-daemon
+./gradlew clean test bootJar cyclonedxBom --no-daemon
 ```
 
 Тесты поднимают отдельный контейнер PostgreSQL через Testcontainers и удаляют его после выполнения. Рабочий том Helpdesk они не используют. Нет подмены PostgreSQL на H2 и нет молчаливого пропуска тестов при недоступном Docker.
@@ -97,11 +97,11 @@ export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
 
 ```text
 README.md                 запуск и повторение проверок
-project.md                разделы 1–5 ЭК1 и использование ИИ
+project.md                полный проект ЭК2, разделы 1–12
 src/main/                 приложение и SQL-миграции
-src/test/                 интеграционные проверки
+src/test/                 интеграционные и модульные проверки
 docs/api.md               контракт API и правила доступа
-individual/author.md      заготовка к ЭК2 и вопросы для подготовки
+individual/author.md      индивидуальный вклад и позиция по выпуску
 evidence/                 существенные результаты проверок
 scripts/                  запуск, демонстрация, проверка документации
 .github/workflows/        конфигурация автоматической проверки
@@ -110,5 +110,38 @@ scripts/                  запуск, демонстрация, проверк
 ## Ограничения учебного запуска
 
 Порт приложения привязан к loopback. HTTP и cookie без признака Secure допустимы только для этого локального сценария.
-Публичный сервер, реальные обращения, TLS, резервное копирование, ограничение частоты входа и эксплуатационное наблюдение в область реализации не входят.
+Публичный сервер, реальные обращения, TLS, резервное копирование и эксплуатационное наблюдение в область реализации не входят.
 Изменение адреса на `0.0.0.0` не превращает её в готовый публичный сервис. Остальные ограничения и приоритеты описаны в [разделе 3 проекта](project.md#3-текущее-состояние).
+
+## Проверки ЭК2
+
+Приложение ограничивает вход: 10 попыток за минуту с одного адреса, затем 429 с `Retry-After`. Учитываются и успешные входы. Перед проверкой лимита перезапустите только приложение, чтобы начать с пустого счётчика:
+
+```sh
+./scripts/compose.sh restart app
+./scripts/compose.sh up -d --wait
+python3 scripts/login_probe.py --expect limited --output build/security/login.json
+python3 scripts/smoke.py
+python3 scripts/http_security_probe.py --output build/security/http.json
+```
+
+Проверка лимита занимает около минуты. При частом повторении smoke может получить 429 — дождитесь следующего окна. Для иного порта всем Python-сценариям передаётся `--base-url http://127.0.0.1:18080`.
+
+Состав собранного JAR и анализ известных уязвимостей:
+
+```sh
+./gradlew bootJar cyclonedxBom --no-daemon
+python3 scripts/package_sbom.py --output build/security/sbom.cdx.json
+# Нужен установленный Trivy 0.76.0:
+trivy sbom --format json --output build/security/dependencies.json build/security/sbom.cdx.json
+```
+
+Полный порядок SCA, проверки секретов, сравнения до/после и границы выводов — в [протоколе ЭК2](evidence/ek2/verification.md). Сохранённые результаты относятся к указанным там версиям и дате базы; новый запуск может обнаружить новые CVE.
+
+Для сдачи используются `project.md`, `individual/author.md`, исходники, настройки и связанные свидетельства. Архив зафиксированного комплекта:
+
+```sh
+git archive --format=zip --prefix=helpdesk/ -o ../helpdesk-ek2.zip ek2
+```
+
+Тег `ek1` сохраняет прежнюю сдачу. Тег `ek2` относится к полному новому комплекту; его точный commit проверяется командой `git rev-parse ek2^{commit}`. ФИО и учебная почта передаются через форму ЭИОС.

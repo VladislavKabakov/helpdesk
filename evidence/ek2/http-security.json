@@ -1,0 +1,55 @@
+{
+  "checked_at": "2026-10-15T13:24:16.983034+00:00",
+  "transport": "HTTP over loopback",
+  "checks": [
+    {
+      "check": "local_cookie_httpOnly_sameSiteStrict_without_secure",
+      "passed": true
+    },
+    {
+      "check": "login_requires_csrf",
+      "passed": true
+    },
+    {
+      "check": "valid_login",
+      "passed": true
+    },
+    {
+      "check": "session_id_rotated",
+      "passed": true
+    },
+    {
+      "check": "old_session_rejected",
+      "passed": true
+    },
+    {
+      "check": "cors_does_not_grant_foreign_origin",
+      "passed": true
+    },
+    {
+      "check": "nosniff_header",
+      "passed": true
+    },
+    {
+      "check": "mutation_requires_csrf",
+      "passed": true
+    },
+    {
+      "check": "malformed_json_generic_400",
+      "passed": true
+    },
+    {
+      "check": "chunked_json_above_32KiB_rejected",
+      "passed": true
+    },
+    {
+      "check": "logout",
+      "passed": true
+    },
+    {
+      "check": "logged_out_cookie_rejected",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-10-15T13:42:22.901886+00:00",
+  "source_commit": "5ac6a7f6405a50af0d80e20f091716154c584d09",
+  "clean_tracked_files": true,
+  "new_environment_file": true,
+  "separate_compose_project": "helpdesk-ek2-clean",
+  "host_port": 18080,
+  "gradle_tests": 37,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "smoke": "PASS: вход, создание, изоляция, назначение, внутренние заметки, решение, повторное открытие, выход",
+  "tickets_before_restart": 1,
+  "tickets_after_restart": 1,
+  "successful_V1_rows": 1,
+  "image_id": "ea2597e71eb557c3e353963d51c2c3c3d67ce4e57be4e297f8c7cc77c5609dcf",
+  "retry_notes": [
+    "Initial clone in /private/tmp was not shared by Colima; moved unchanged clone under home and recreated only the temporary failed volume.",
+    "APP_PORT=18080 persisted in temporary .env so later Compose invocations keep the isolated port."
+  ]
+}

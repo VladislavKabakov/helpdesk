@@ -1,0 +1,84 @@
+{
+  "checked_at": "2026-10-15T13:46:04.313463+00:00",
+  "course_revision": "5ce5fdf4ba4bb32ac62d1b9c6728f3a6d8fa6884",
+  "review_type": "Separate Codex self-review, not independent human review and not a guaranteed grade",
+  "criteria": [
+    {
+      "criterion": "traceability",
+      "weight_percent": 10,
+      "evidence": "project.md sections 1, 3, 5–9; source-manifest.json",
+      "conclusion": "Risks, methods, findings and release candidate are linked.",
+      "status": "checked"
+    },
+    {
+      "criterion": "secure_sdlc",
+      "weight_percent": 15,
+      "evidence": "project.md sections 2, 4, 9",
+      "conclusion": "One accountable participant, gates Q1–Q4, exceptions E01–E04 and escalation.",
+      "status": "checked"
+    },
+    {
+      "criterion": "methods",
+      "weight_percent": 10,
+      "evidence": "project.md sections 5–6; verification.md",
+      "conclusion": "M1–M7 specify scope, tools, responsible participant, repetition and limits.",
+      "status": "checked"
+    },
+    {
+      "criterion": "reproducibility",
+      "weight_percent": 15,
+      "evidence": "clean-checkout.json, runtime.json, tools.json, README.md",
+      "conclusion": "Clean source, generated environment, real PostgreSQL, fresh volume and repeated migration; Colima directory failure disclosed.",
+      "status": "checked"
+    },
+    {
+      "criterion": "improvement",
+      "weight_percent": 15,
+      "evidence": "login-before.json, login-after.json, tests-before.json, tests-after.json",
+      "conclusion": "Comparable login scenario; 28 to 37 tests; code commit 5ac6a7f.",
+      "status": "checked"
+    },
+    {
+      "criterion": "triage",
+      "weight_percent": 10,
+      "evidence": "triage.json, secrets-triage.json",
+      "conclusion": "Confirmed component matches, non-applicability, false positives and unresolved applicability are distinct.",
+      "status": "checked"
+    },
+    {
+      "criterion": "release",
+      "weight_percent": 10,
+      "evidence": "project.md section 9; source-manifest.json",
+      "conclusion": "Conditional local release only; specific candidate and evidence, owned time-limited exceptions.",
+      "status": "checked"
+    },
+    {
+      "criterion": "metrics_roadmap_memo",
+      "weight_percent": 10,
+      "evidence": "project.md sections 10–11",
+      "conclusion": "Interpretable metrics, prioritized 6–12 month roadmap and standalone management memo.",
+      "status": "checked"
+    },
+    {
+      "criterion": "individual_defense",
+      "weight_percent": 5,
+      "evidence": "individual/author.md; project.md section 12",
+      "conclusion": "Contribution and AI assistance disclosed; oral defense has not happened and cannot be certified by repository checks.",
+      "status": "materials_ready_defense_pending"
+    }
+  ],
+  "structure": [
+    "README.md",
+    "project.md sections 1–12",
+    "individual/author.md",
+    "referenced evidence",
+    "code and configuration"
+  ],
+  "old_ek1_tag_unchanged": true,
+  "remaining_external_actions": [
+    "Publish final commit and new ek2 tag after user approval",
+    "Confirm actual GitHub Actions result after publication",
+    "Upload archive and identity details to EIOS",
+    "Individual oral defense"
+  ]
+}

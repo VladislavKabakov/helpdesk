@@ -1,0 +1,65 @@
+{
+  "checked_at": "2026-10-15T13:42:22.901886+00:00",
+  "containers": {
+    "app": {
+      "image_id": "sha256:a674772ce654efdb6cc780c5587fa6350c8b31c554bc415c68071c363dffc5f8",
+      "user": "10001:10001",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "8080"
+          }
+        ]
+      },
+      "memory_bytes": 805306368,
+      "health": "healthy",
+      "mounts": []
+    },
+    "db": {
+      "image_id": "sha256:25a89970a83255ae96484d709005bb35aa71f7455f941bc1634514f31c5d5c62",
+      "user": "",
+      "read_only": false,
+      "cap_drop": null,
+      "security_opt": null,
+      "ports": {
+        "5432/tcp": null
+      },
+      "memory_bytes": 536870912,
+      "health": "healthy",
+      "mounts": [
+        {
+          "type": "bind",
+          "destination": "/docker-entrypoint-initdb.d/01-app.sh"
+        },
+        {
+          "type": "volume",
+          "destination": "/var/lib/postgresql/data"
+        }
+      ]
+    }
+  },
+  "postgres_version": "17.11",
+  "role": {
+    "rolname": "helpdesk",
+    "rolsuper": false,
+    "rolcreatedb": false,
+    "rolcreaterole": false
+  },
+  "table_owner": "helpdesk",
+  "migrations": [
+    {
+      "version": "1",
+      "description": "initial schema",
+      "success": true
+    }
+  ],
+  "java": "openjdk version \"17.0.20.1\" 2026-08-18\nOpenJDK Runtime Environment Temurin-17.0.20.1+1 (build 17.0.20.1+1)\nOpenJDK 64-Bit Server VM Temurin-17.0.20.1+1 (build 17.0.20.1+1, mixed mode, sharing)"
+}

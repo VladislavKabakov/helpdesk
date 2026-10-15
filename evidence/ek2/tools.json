@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-10-15T13:42:22.901886+00:00",
+  "source_commit": "5ac6a7f6405a50af0d80e20f091716154c584d09",
+  "docker": "24.0.2 / 23.0.6",
+  "compose": "2.18.1",
+  "python": "Python 3.13.0",
+  "gradle": "8.14.3",
+  "kotlin": "2.2.21",
+  "trivy": "Version: 0.76.0",
+  "gitleaks": "8.30.1",
+  "trivy_db": {
+    "Version": 2,
+    "NextUpdate": "2026-10-16T07:10:08.755380121Z",
+    "UpdatedAt": "2026-10-15T07:10:08.755380281Z",
+    "DownloadedAt": "2026-10-15T12:29:23.061933Z"
+  },
+  "tool_archive_sha256": {
+    "trivy_0.76.0_macOS_ARM64": "e7ec0d21fe842553f59af99aba2efbcc822369fbaed27019c575408b6d135fce",
+    "gitleaks_8.30.1_darwin_arm64": "b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5"
+  }
+}
